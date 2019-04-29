@@ -1,0 +1,80 @@
+﻿@model WebMvc.Models.UserModel
+
+@{
+    ViewBag.Title = "AddOrEdit";
+    int currentId = ViewBag.CurrentId;
+}
+
+<h2>AddOrEdit</h2>
+
+<div class="form-body">
+    @using (Html.BeginForm("CreateOrEdit", "User", new { current = currentId }))
+    {
+        @Html.HiddenFor(user => user.idUser)
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.userFullName)
+            @Html.EditorFor(user => user.userFullName)
+            @Html.ValidationMessageFor(user => user.userFullName)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.userNickname)
+            @Html.EditorFor(user => user.userNickname)
+            @Html.ValidationMessageFor(user => user.userNickname)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.userPassword)
+            @Html.EditorFor(user => user.userPassword)
+            @Html.ValidationMessageFor(user => user.userPassword)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.userAddress)
+            @Html.EditorFor(user => user.userAddress)
+            @Html.ValidationMessageFor(user => user.userAddress)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.userPhone)
+            @Html.EditorFor(user => user.userPhone)
+            @Html.ValidationMessageFor(user => user.userPhone)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.userMail)
+            @Html.EditorFor(user => user.userMail)
+            @Html.ValidationMessageFor(user => user.userMail)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.userAge)
+            @Html.EditorFor(user => user.userAge)
+            @Html.ValidationMessageFor(user => user.userAge)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(user => user.fl_userRole)
+            @*@Html.DropDownListFor(user => user.fl_userRole, ViewBag.Roles as SelectList)*@
+            @Html.EditorFor(user => user.fl_userRole)
+            @Html.ValidationMessageFor(user => user.fl_userRole)
+        </div>
+
+        <p>*Roles: 1 -> Administrador, 2 -> Visitante, 3 -> Asistente, 4 -> Editor</p>
+
+        @*@Html.HiddenFor(user => user.fl_userRole, new { @Value = 2 })*@
+
+        <div class="form-group">
+            <input type="submit" value="Confirmar" class="btn btn-info" />
+            <input type="reset" value="Reestablecer" class="btn btn-default" />
+        </div>
+
+    }
+
+</div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval");
+}
+

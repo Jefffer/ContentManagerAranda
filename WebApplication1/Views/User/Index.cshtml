@@ -1,0 +1,146 @@
+﻿@model IEnumerable<WebMvc.Models.UserModel>
+
+@{
+    ViewBag.Title = "Administrador de Contenido";
+    var currentUser = (WebMvc.Models.UserModel)ViewBag.CurrentUser;
+    List<int> permissions = new List<int>();
+    foreach (var pr in currentUser.Role.Permission_Role)
+    {
+        permissions.Add(pr.idPermission);
+    }
+}
+
+<h2>Bienvenido, @currentUser.userFullName</h2>
+
+<h3>Tus Datos:</h3>
+
+<p>
+    <b>Nombre Completo:</b> @currentUser.userFullName.ToString() |
+    <b>Nickname:</b> @currentUser.userNickname |
+    <b>Contraseña:</b> @currentUser.userPassword |
+    <b>Dirección:</b> @currentUser.userAddress.ToString() |
+    <b>Teléfono:</b> @currentUser.userPhone.ToString() |
+    <b>Correo:</b> @currentUser.userMail.ToString() |
+    <b>Edad:</b> @currentUser.userAge.ToString() |
+    <b>Rol:</b> @currentUser.Role.roleName
+</p>
+
+<hr />
+
+
+@if (permissions.Contains(2)) // 2 -> rol Visitante
+{
+    <h3>Noticias:</h3>
+    <h4>Lanzan plan para enseñar programación en colegios públicos</h4>
+    <p>La iniciativa Coding for Kids, presentada por el Ministerio de Tecnologías de la Información y Comunicaciones en alianza con el British Council, capacitará a 260 docentes en lenguaje de programación digital durante los próximos ocho meses. Se espera que se beneficien 15.600 estudiantes de colegios públicos.</p>
+    <p>En la presentación del programa, la ministra Sylvia Constaín indicó que Coding for Kids se basa en una metodología de programación que el British Council realiza en cerca de 23 países mediante el uso de ‘micro:bit’ (un dispositivo tan grande como una tarjeta de bolsillo). </p>
+    <hr />
+}
+
+@if (permissions.Contains(3))
+{
+    if (permissions.Contains(5))
+    {
+        <p>
+            @*@Html.ActionLink("Crear nuevo usuario", "Create")*@
+            <a href="@Url.Action("CreateOrEdit","User", new { current = currentUser.idUser })" class="btn btn-default">Crear Nuevo Usuario <b>&#43;</b></a>
+        </p>
+    }
+
+    <table class="table">
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                NickName
+            </th>
+            @*<th>
+                    Contraseña
+                </th>*@
+            <th>
+                Nombre Completo
+            </th>
+            <th>
+                Dirección
+            </th>
+            <th>
+                Teléfono
+            </th>
+            <th>
+                Correo
+            </th>
+            <th>
+                Edad
+            </th>
+            <th>
+                Rol
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.idUser)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userNickname)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.userPassword)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.userFullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userPhone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userMail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userAge)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role.roleName)
+                </td>
+                <td>
+                    @if (permissions.Contains(4))
+                    {
+                        <a href="@Url.Action("CreateOrEdit", "User", new { current = currentUser.idUser, idUser = item.idUser })" class="btn btn-default">&#9998; Editar</a>
+                    }
+                    @if (permissions.Contains(6))
+                    {
+                        <a href="@Url.Action("Delete", "User", new { current = currentUser.idUser, idUser = item.idUser })" class="btn btn-danger">&#128465; Eliminar</a>
+                        <a onclick="Delete(@item.idUser)" class="btn btn-danger">X</a>
+                    }
+
+                    @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
+
+    </table>
+
+}
+
+@section scripts {
+    <script>
+        function Delete(idUser) {
+            var option = confirm("El usuario será eliminado, ¿desea continuar?");
+            if (option) {
+                window.location.href = '@Url.Action("Delete", "User")/' + idUser;
+            }
+            else {
+                alert('El usuario no se eliminó.');
+            }
+        }
+
+    </script>
+
+}
